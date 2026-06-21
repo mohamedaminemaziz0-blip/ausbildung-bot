@@ -12,7 +12,17 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import os
+def check_password():
+    password = st.text_input("Enter password:", type="password")
+    if password == "Aa654?654?":
+        return True
+    else:
+        if password:
+            st.error("Wrong password!")
+        return False
 
+if not check_password():
+    st.stop()
 # ---------- googlesearch compatibility ----------
 try:
     from googlesearch import search as google_search
