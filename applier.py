@@ -255,22 +255,23 @@ if st.button("Start search"):
         send_clicked = col1.button(f"Send to {email}", key=f"btn_{idx}")
         col2.write("")  # spacer
 
-        if send_clicked:
+       if send_clicked:
             if st.session_state.daily_counter >= 30:
                 st.error("Limit reached.")
                 continue
 
             subject = f"Bewerbung um einen Ausbildungsplatz als {profession}"
             ok = send_email(email_sender, email_password, email, subject, cover_letter, cv_file)
-       if ok:
-        st.session_state.daily_counter += 1
-            save_counter(st.session_state.daily_counter)
             
-            # Save to history file
-            save_to_history(name, email)
-            
-            total_sent += 1
-            st.success(f"Sent! Total today: {st.session_state.daily_counter}/30")
+            if ok:
+                st.session_state.daily_counter += 1
+                save_counter(st.session_state.daily_counter)
+                
+                # Save to history file
+                save_to_history(name, email)
+                
+                total_sent += 1
+                st.success(f"Sent! Total today: {st.session_state.daily_counter}/30")
             else:
                 st.error("Failed to send.")
 
