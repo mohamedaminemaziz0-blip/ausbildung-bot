@@ -262,15 +262,15 @@ if st.button("Start search"):
 
             subject = f"Bewerbung um einen Ausbildungsplatz als {profession}"
             ok = send_email(email_sender, email_password, email, subject, cover_letter, cv_file)
-        if ok:
+       if ok:
         st.session_state.daily_counter += 1
-        save_counter(st.session_state.daily_counter)
-        
-        # Save to history file
-        save_to_history(name, email)
-        
-        total_sent += 1
-        st.success(f"Sent! Total today: {st.session_state.daily_counter}/30")
+            save_counter(st.session_state.daily_counter)
+            
+            # Save to history file
+            save_to_history(name, email)
+            
+            total_sent += 1
+            st.success(f"Sent! Total today: {st.session_state.daily_counter}/30")
             else:
                 st.error("Failed to send.")
 
