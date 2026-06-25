@@ -16,7 +16,7 @@ import pandas as pd
 def check_password():
     password = st.text_input("Enter password:", type="password")
     if password == "Aa654?654":
-    return True
+        return True
     else:
         if password:
             st.error("Wrong password!")
@@ -24,7 +24,8 @@ def check_password():
 
 if not check_password():
     st.stop()
-    def save_to_history(company_name, email):
+
+def save_to_history(company_name, email):
     file_path = "history.csv"
     if not os.path.exists(file_path):
         df = pd.DataFrame(columns=['Company', 'Email'])
