@@ -44,28 +44,73 @@ with tab3:
     st.subheader("Professional CV Builder (German Style)")
     
     with st.form("cv_form"):
-        name = st.text_input("Full Name")
-        address = st.text_input("Address")
+        # Personal Information
+        st.write("### Personal Information")
+        uploaded_file = st.file_uploader("Upload your professional photo", type=["jpg", "jpeg", "png"])
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            name = st.text_input("Full Name")
+            email = st.text_input("Email")
+        with col2:
+            phone = st.text_input("Phone Number")
+            address = st.text_input("Address")
+        
+        # Education & Languages
+        st.write("### Education & Languages")
+        education = st.text_area("School/University & Degree")
+        languages = st.text_input("Languages (e.g., German B2, English)")
+        
+        # Skills, Experience & Hobbies
+        st.write("### Skills, Experience & Hobbies")
         skills = st.text_area("Skills (e.g., Lagerlogistik, Staplerschein)")
-        experience = st.text_area("Work Experience")
+        experience = st.text_area("Work Experience (Company, Role, Dates)")
+        hobbies = st.text_input("Hobbies (e.g., Fitness, Reading)")
         
         submitted = st.form_submit_button("Generate PDF")
         
         if submitted:
             pdf = FPDF()
             pdf.add_page()
+            
+            # Add Image if uploaded
+            if uploaded_file is not None:
+                with open("temp_photo.jpg", "wb") as f:
+                    f.write(uploaded_file.getbuffer())
+                pdf.image("temp_photo.jpg", x=150, y=20, w=40)
+            
             pdf.set_font("Arial", 'B', 16)
             pdf.cell(200, 10, txt="Lebenslauf", ln=True, align='C')
+            
             pdf.set_font("Arial", size=12)
             pdf.ln(10)
             pdf.cell(200, 10, txt=f"Name: {name}", ln=True)
+            pdf.cell(200, 10, txt=f"Email: {email} | Phone: {phone}", ln=True)
             pdf.cell(200, 10, txt=f"Address: {address}", ln=True)
+            
             pdf.ln(5)
+            pdf.set_font("Arial", 'B', 12)
+            pdf.cell(200, 10, txt="Education & Languages:", ln=True)
+            pdf.set_font("Arial", size=12)
+            pdf.multi_cell(0, 10, txt=f"Education: {education}\nLanguages: {languages}")
+            
+            pdf.ln(5)
+            pdf.set_font("Arial", 'B', 12)
             pdf.cell(200, 10, txt="Skills:", ln=True)
+            pdf.set_font("Arial", size=12)
             pdf.multi_cell(0, 10, txt=skills)
+            
             pdf.ln(5)
+            pdf.set_font("Arial", 'B', 12)
             pdf.cell(200, 10, txt="Experience:", ln=True)
+            pdf.set_font("Arial", size=12)
             pdf.multi_cell(0, 10, txt=experience)
+            
+            pdf.ln(5)
+            pdf.set_font("Arial", 'B', 12)
+            pdf.cell(200, 10, txt="Hobbies:", ln=True)
+            pdf.set_font("Arial", size=12)
+            pdf.multi_cell(0, 10, txt=hobbies)
             
             pdf_output = pdf.output(dest='S').encode('latin-1')
             st.download_button("Download CV PDF", pdf_output, "Lebenslauf.pdf", "application/pdf")
