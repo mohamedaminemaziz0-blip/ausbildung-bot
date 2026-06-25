@@ -250,12 +250,12 @@ if st.button("Start search"):
 
         with st.expander("Preview Anschreiben"):
             st.text_area("Cover letter", cover_letter, height=200, key=f"cl_{idx}")
-
-        col1, col2 = st.columns([1, 3])
-        send_clicked = col1.button(f"Send to {email}", key=f"btn_{idx}")
-        col2.write("")  # spacer
-
-       if send_clicked:
+            
+        coll, col2 = st.columns([1, 3])
+        send_clicked = coll.button(f"Send to {email}", key=f"btn_{idx}")
+        col2.write("") # spacer
+        
+        if send_clicked:
             if st.session_state.daily_counter >= 30:
                 st.error("Limit reached.")
                 continue
@@ -274,16 +274,16 @@ if st.button("Start search"):
                 st.success(f"Sent! Total today: {st.session_state.daily_counter}/30")
             else:
                 st.error("Failed to send.")
-
-        time.sleep(1.5)  # polite delay
+                
+        time.sleep(1.5) # polite delay
         st.markdown("---")
 
     st.info(f"Done. Processed {processed_urls} URLs, sent {total_sent} new emails.")
-  
-st.divider()
-st.subheader("📜 Application History")
-if os.path.exists("history.csv"):
-    df = pd.read_csv("history.csv")
-    st.table(df)
-else:
-    st.info("No applications sent yet.")
+
+    st.divider()
+    st.subheader("📜 Application History")
+    if os.path.exists("history.csv"):
+        df = pd.read_csv("history.csv")
+        st.table(df)
+    else:
+        st.info("No applications sent yet.")
