@@ -30,12 +30,7 @@ tab1, tab2, tab3 = st.tabs(["🚀 Application Bot", "📜 History", "📄 CV Bui
 
 with tab1:
     st.subheader("Automated Application Sender")
-    company_name = st.text_input("Company Name")
-    email = st.text_input("Email")
-    if st.button("Apply"):
-        st.write("Applying to", company_name)
-        save_to_history(company_name, email)
-        st.success("Application saved!")
+    
 
 with tab2:
     st.subheader("Application History")
