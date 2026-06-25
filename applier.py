@@ -15,7 +15,7 @@ import os
 import pandas as pd
 def check_password():
     password = st.text_input("Enter password:", type="password")
-    if password == "Aa654?654"
+    if password == "Aa654?654":
     return True
     else:
         if password:
