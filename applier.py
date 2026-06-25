@@ -12,6 +12,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import os
+import pandas as pd
 def check_password():
     password = st.text_input("Enter password:", type="password")
     if password == "Aa654?654?":
@@ -23,6 +24,14 @@ def check_password():
 
 if not check_password():
     st.stop()
+    def save_to_history(company_name, email):
+    file_path = "history.csv"
+    if not os.path.exists(file_path):
+        df = pd.DataFrame(columns=['Company', 'Email'])
+        df.to_csv(file_path, index=False)
+    
+    new_data = pd.DataFrame({'Company': [company_name], 'Email': [email]})
+    new_data.to_csv(file_path, mode='a', header=False, index=False)
 # ---------- googlesearch compatibility ----------
 try:
     from googlesearch import search as google_search
@@ -252,11 +261,15 @@ if st.button("Start search"):
 
             subject = f"Bewerbung um einen Ausbildungsplatz als {profession}"
             ok = send_email(email_sender, email_password, email, subject, cover_letter, cv_file)
-            if ok:
-                st.session_state.daily_counter += 1
-                save_counter(st.session_state.daily_counter)
-                total_sent += 1
-                st.success(f"Sent! Total today: {st.session_state.daily_counter}/30")
+           if ok:
+        st.session_state.daily_counter += 1
+        save_counter(st.session_state.daily_counter)
+        
+        # Save to history file
+        save_to_history(name, email)
+        
+        total_sent += 1
+        st.success(f"Sent! Total today: {st.session_state.daily_counter}/30")
             else:
                 st.error("Failed to send.")
 
@@ -264,3 +277,11 @@ if st.button("Start search"):
         st.markdown("---")
 
     st.info(f"Done. Processed {processed_urls} URLs, sent {total_sent} new emails.")
+  
+st.divider()
+st.subheader("📜 Application History")
+if os.path.exists("history.csv"):
+    df = pd.read_csv("history.csv")
+    st.table(df)
+else:
+    st.info("No applications sent yet.")
