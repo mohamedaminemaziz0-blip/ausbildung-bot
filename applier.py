@@ -262,7 +262,7 @@ if st.button("Start search"):
 
             subject = f"Bewerbung um einen Ausbildungsplatz als {profession}"
             ok = send_email(email_sender, email_password, email, subject, cover_letter, cv_file)
-           if ok:
+        if ok:
         st.session_state.daily_counter += 1
         save_counter(st.session_state.daily_counter)
         
