@@ -2,3 +2,4 @@ streamlit
 openai
 beautifulsoup4
 googlesearch-python
+fpdf
