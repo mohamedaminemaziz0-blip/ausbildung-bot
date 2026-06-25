@@ -13,6 +13,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 import os
 import pandas as pd
+from fpdf import FPDF
 def check_password():
     password = st.text_input("Enter password:", type="password")
     if password == "Aa654?654?":
@@ -24,7 +25,55 @@ def check_password():
 
 if not check_password():
     st.stop()
+# Tabs structure
+tab1, tab2, tab3 = st.tabs(["🚀 Application Bot", "📜 History", "📄 CV Builder"])
 
+with tab1:
+    st.subheader("Automated Application Sender")
+    company_name = st.text_input("Company Name")
+    email = st.text_input("Email")
+    if st.button("Apply"):
+        st.write("Applying to", company_name)
+        save_to_history(company_name, email)
+        st.success("Application saved!")
+
+with tab2:
+    st.subheader("Application History")
+    if os.path.exists("history.csv"):
+        df = pd.read_csv("history.csv")
+        st.table(df)
+    else:
+        st.info("No applications sent yet.")
+
+with tab3:
+    st.subheader("Professional CV Builder (German Style)")
+    
+    with st.form("cv_form"):
+        name = st.text_input("Full Name")
+        address = st.text_input("Address")
+        skills = st.text_area("Skills (e.g., Lagerlogistik, Staplerschein)")
+        experience = st.text_area("Work Experience")
+        
+        submitted = st.form_submit_button("Generate PDF")
+        
+        if submitted:
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial", 'B', 16)
+            pdf.cell(200, 10, txt="Lebenslauf", ln=True, align='C')
+            pdf.set_font("Arial", size=12)
+            pdf.ln(10)
+            pdf.cell(200, 10, txt=f"Name: {name}", ln=True)
+            pdf.cell(200, 10, txt=f"Address: {address}", ln=True)
+            pdf.ln(5)
+            pdf.cell(200, 10, txt="Skills:", ln=True)
+            pdf.multi_cell(0, 10, txt=skills)
+            pdf.ln(5)
+            pdf.cell(200, 10, txt="Experience:", ln=True)
+            pdf.multi_cell(0, 10, txt=experience)
+            
+            pdf_output = pdf.output(dest='S').encode('latin-1')
+            st.download_button("Download CV PDF", pdf_output, "Lebenslauf.pdf", "application/pdf")
 def save_to_history(company_name, email):
     file_path = "history.csv"
     if not os.path.exists(file_path):
