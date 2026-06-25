@@ -54,7 +54,10 @@ with tab3:
             email = st.text_input("Email")
         with col2:
             phone = st.text_input("Phone Number")
-            address = st.text_input("Address")
+            city = st.text_input("City")
+            country = st.text_input("Country") # Nouveau champ pour le pays
+        
+        address_display = f"{city}, {country}" # Fusion pour l'affichage
         
         # Education & Languages
         st.write("### Education & Languages")
